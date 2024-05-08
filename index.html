@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jaylolfadez haircut booking</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f8f9fa;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+        .calendar {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            margin-top: 20px;
+        }
+        .day {
+            width: calc(100% / 7);
+            text-align: center;
+            border: 2px solid transparent;
+            padding: 15px 0;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-sizing: border-box;
+        }
+        .day:hover {
+            background-color: #f0f0f0;
+        }
+        .day.selected {
+            background-color: #007bff;
+            color: #fff;
+        }
+        #selectedDate {
+            margin-top: 20px;
+            text-align: center;
+        }
+        #selectedDate p {
+            margin-bottom: 10px;
+        }
+        select {
+            padding: 8px 12px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+        }
+        button {
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        .popup {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.2);
+            z-index: 1000;
+            display: none;
+        }
+        .popup p {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .popup button {
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        .popup button:hover {
+            background-color: #0056b3;
+        }
+        .images {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
+        }
+        .images img {
+            width: calc(100% / 3 - 10px);
+            border-radius: 10px;
+        }
+        #instagram {
+            text-align: center;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Jaylolfadez Haircut Booking</h1>
+        <div class="calendar" id="calendar">
+            <!-- Days will be dynamically added here using JavaScript -->
+        </div>
+        <div id="selectedDate">
+            <!-- Selected date and available times will be displayed here -->
+        </div>
+        <div class="images">
+            <img src="https://media.discordapp.net/attachments/1237878482332155935/1237891384254533703/IMG_8945.png?ex=663d4bb0&is=663bfa30&hm=939d7a9c3cd0e142683d789b7867a66f322a1b1cfc5a0c9e7951ce9a44304bee&=&format=webp&quality=lossless&width=1030&height=1136" alt="image1"width="300" height="300">
+            <img src="https://media.discordapp.net/attachments/1237878482332155935/1237891384761913434/IMG_8944.png?ex=663d4bb1&is=663bfa31&hm=733e72eb2a491601280ea0f0d9f5a963579dbb9320e9201d605a2173542800f3&=&format=webp&quality=lossless&width=1148&height=1138" alt="image2"width="300" height="300">
+            <img src="https://media.discordapp.net/attachments/1237878482332155935/1237891385160368228/IMG_8943.png?ex=663d4bb1&is=663bfa31&hm=0f10185f94ac754e9e0e25c369d0c0c347d795cfa390d59a88db057236b6c9e1&=&format=webp&quality=lossless&width=1122&height=1138" alt="image3"width="300" height="300">
+        </div>
+        <div id="instagram">
+            <a href="https://www.instagram.com/jaylolfadez/"> @jaylolfadez on instagram</a>
+        </div>
+    </div>
+
+    <div class="popup" id="popup">
+        <p>Your appointment has been sent to Jay Liang.</p>
+        <button id="closePopup">Close</button>
+    </div>
+
+    <script>
+        // Function to generate calendar
+        function generateCalendar() {
+            const calendarElement = document.getElementById('calendar');
+            const days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+            const today = new Date();
+            const currentMonth = today.getMonth();
+            const currentYear = today.getFullYear();
+            const daysInMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
+            const firstDayOfMonth = new Date(currentYear, currentMonth, 1).getDay();
+
+            calendarElement.innerHTML = '';
+
+            // Add day headers
+            for (let i = 0; i < days.length; i++) {
+                const dayElement = document.createElement('div');
+                dayElement.classList.add('day');
+                dayElement.textContent = days[i];
+                calendarElement.appendChild(dayElement);
+            }
+
+            // Add empty cells for the days before the 1st day of the month
+            for (let i = 0; i < firstDayOfMonth; i++) {
+                const emptyCell = document.createElement('div');
+                emptyCell.classList.add('day', 'empty');
+                calendarElement.appendChild(emptyCell);
+            }
+
+            // Add days of the month
+            for (let i = 1; i <= daysInMonth; i++) {
+                const dayElement = document.createElement('div');
+                dayElement.classList.add('day');
+                dayElement.textContent = i;
+                dayElement.addEventListener('click', function() {
+                    selectDate(i, currentMonth, currentYear);
+                });
+                calendarElement.appendChild(dayElement);
+            }
+        }
+
+        // Function to select date and show available times
+        function selectDate(day, month, year) {
+            const selectedDateElement = document.getElementById('selectedDate');
+            const selectedDate = new Date(year, month, day);
+            const options = {
+                weekday: 'long',
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric'
+            };
+            const formattedDate = selectedDate.toLocaleDateString('en-US', options);
+            const availableTimes = ['9:00 AM', '10:00 AM', '11:00 AM', '1:00 PM', '2:00 PM', '3:00 PM', '4:00 PM'];
+
+            selectedDateElement.innerHTML = `
+                <p>Selected Date: ${formattedDate}</p>
+                <p>Available Times:</p>
+                <select>
+                    ${availableTimes.map(time => `<option value="${time}">${time}</option>`).join('')}
+                </select>
+                <button onclick="showPopup()">Book Appointment</button>
+            `;
+        }
+
+        // Function to show popup
+        function showPopup() {
+            const popup = document.getElementById('popup');
+            popup.style.display = 'block';
+        }
+
+        // Function to close popup
+        document.getElementById('closePopup').addEventListener('click', function() {
+            const popup = document.getElementById('popup');
+            popup.style.display = 'none';
+        });
+
+        // Generate calendar when the page loads
+        window.onload = generateCalendar;
+    </script>
+</body>
+</html>
